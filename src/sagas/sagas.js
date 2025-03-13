@@ -6,24 +6,18 @@ import {
 	fetchHotels,
 	setHotels,
 } from '../slices/destinationsSlice.jsx'
+import api from '../api.js'
 import { push } from 'redux-first-history'
 
 function* fetchDestinationsSaga() {
-	const response = yield call(
-		axios.get,
-		`${process.env.REACT_APP_API_URL}/destination`
-	)
+	const response = yield call(api.get, '/destination')
 	yield put(setDestinations(response.data))
 }
 
 function* fetchHotelsSaga(action) {
-	const response = yield call(
-		axios.get,
-		`${process.env.REACT_APP_API_URL}/hotels`,
-		{
-			params: { city: action.payload.destination },
-		}
-	)
+	const response = yield call(api.get, '/hotels', {
+		params: { city: action.payload.destination },
+	})
 	yield put(setHotels(response.data))
 	yield put(push('/hotels'))
 }
